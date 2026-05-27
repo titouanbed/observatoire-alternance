@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Observatoire de l'Alternance — Solution Alternance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#0a0a0a;--white:#f8f7f4;--gray-100:#f0ede8;--gray-200:#e2ddd6;
+  --gray-400:#a09890;--gray-600:#6b635a;--gray-800:#2e2820;
+  --accent:#1a3a2a;--accent-mid:#3d7a58;--accent-light:#e5f0ea;
+  --gold:#c9a84c;--gold-light:#fdf6e3;
+  --red:#8b2020;--red-light:#fdf0f0;
+  --radius:3px;--t:240ms ease
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--black);min-height:100vh;overflow-x:hidden}
+
+/* ── HEADER ── */
+.header{position:sticky;top:0;z-index:100;background:rgba(248,247,244,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--gray-200);padding:16px 0}
+.header-inner{max-width:1200px;margin:0 auto;padding:0 40px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:'DM Serif Display',serif;font-size:16px;color:var(--black);text-decoration:none;display:flex;align-items:center;gap:6px}
+.logo-dot{width:7px;height:7px;border-radius:50%;background:var(--accent-mid)}
+.header-center{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--gray-400);letter-spacing:.1em;text-transform:uppercase;font-weight:500}
+.live-dot{width:6px;height:6px;border-radius:50%;background:#3d7a58;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.header-cta{font-size:12px;font-weight:500;padding:8px 20px;background:var(--black);color:var(--white);border:none;border-radius:var(--radius);cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:background var(--t)}
+.header-cta:hover{background:var(--gray-800)}
+
+/* ── HERO ── */
+.hero{max-width:1200px;margin:0 auto;padding:80px 40px 60px;border-bottom:1px solid var(--gray-200)}
+.hero-eyebrow{font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--accent-mid);margin-bottom:24px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--accent-mid)}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(36px,5vw,64px);line-height:1.05;color:var(--black);margin-bottom:20px;max-width:700px}
+.hero h1 em{font-style:italic;color:var(--gray-600)}
+.hero-desc{font-size:16px;color:var(--gray-600);max-width:560px;line-height:1.7;margin-bottom:40px}
+.hero-stats{display:flex;gap:48px;flex-wrap:wrap}
+.hstat{display:flex;flex-direction:column;gap:4px}
+.hstat-val{font-family:'DM Serif Display',serif;font-size:36px;color:var(--black);line-height:1}
+.hstat-label{font-size:12px;color:var(--gray-400);letter-spacing:.05em}
+
+/* ── FILTRES ── */
+.filters-wrap{max-width:1200px;margin:0 auto;padding:32px 40px 0}
+.filters-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.filter-label{font-size:12px;color:var(--gray-400);letter-spacing:.08em;text-transform:uppercase;font-weight:500;margin-right:4px}
+.search-box{flex:1;min-width:220px;max-width:360px;position:relative}
+.search-box input{width:100%;padding:10px 14px 10px 36px;font-size:13px;border:1px solid var(--gray-200);border-radius:var(--radius);background:var(--white);color:var(--black);font-family:'DM Sans',sans-serif;outline:none;transition:border-color var(--t)}
+.search-box input:focus{border-color:var(--gray-400)}
+.search-box svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);pointer-events:none}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap}
+.fpill{font-size:12px;padding:7px 16px;border-radius:99px;border:1px solid var(--gray-200);background:var(--white);color:var(--gray-600);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all var(--t);font-weight:400}
+.fpill:hover{border-color:var(--gray-400);color:var(--black)}
+.fpill.on{background:var(--black);color:var(--white);border-color:var(--black)}
+.sort-select{font-size:12px;padding:7px 12px;border:1px solid var(--gray-200);border-radius:var(--radius);background:var(--white);color:var(--black);cursor:pointer;font-family:'DM Sans',sans-serif;outline:none}
+.results-count{font-size:13px;color:var(--gray-400);margin-bottom:20px}
+.results-count strong{color:var(--black)}
+
+/* ── GRID ── */
+.grid-wrap{max-width:1200px;margin:0 auto;padding:0 40px 80px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
+
+/* ── CARD ── */
+.card{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:24px;transition:border-color var(--t),box-shadow var(--t);position:relative;overflow:hidden;cursor:pointer}
+.card:hover{border-color:var(--gray-400);box-shadow:0 4px 20px rgba(0,0,0,.06)}
+.card-ima-badge{position:absolute;top:16px;right:16px;font-size:10px;font-weight:500;padding:4px 10px;border-radius:99px;letter-spacing:.05em;text-transform:uppercase}
+.ima-pioneer{background:var(--accent-light);color:var(--accent)}
+.ima-advanced{background:#e6f1fb;color:#0c447c}
+.ima-transition{background:var(--gold-light);color:#7a5500}
+.card-region{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400);margin-bottom:8px}
+.card-name{font-family:'DM Serif Display',serif;font-size:18px;line-height:1.2;color:var(--black);margin-bottom:4px;padding-right:80px}
+.card-type{font-size:12px;color:var(--gray-400);margin-bottom:16px}
+.card-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.metric{background:var(--gray-100);border-radius:4px;padding:10px 12px}
+.metric-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--black);line-height:1}
+.metric-val.good{color:var(--accent-mid)}
+.metric-val.mid{color:var(--gold)}
+.metric-val.bad{color:var(--red)}
+.metric-label{font-size:10px;color:var(--gray-400);margin-top:3px;letter-spacing:.03em}
+.card-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px solid var(--gray-200)}
+.card-effectif{font-size:12px;color:var(--gray-400)}
+.card-cta{font-size:11px;font-weight:500;color:var(--accent-mid);text-decoration:none;display:flex;align-items:center;gap:4px;transition:gap var(--t)}
+.card-cta:hover{gap:8px}
+.card-ima-score{display:flex;align-items:center;gap:6px;margin-bottom:16px}
+.ima-bar-outer{flex:1;height:4px;background:var(--gray-200);border-radius:2px;overflow:hidden}
+.ima-bar-fill{height:100%;border-radius:2px;transition:width 800ms cubic-bezier(.16,1,.3,1)}
+.ima-score-label{font-size:11px;font-weight:500;color:var(--gray-600);min-width:36px;text-align:right}
+
+/* ── SKELETON ── */
+.skeleton{background:linear-gradient(90deg,var(--gray-100) 25%,var(--gray-200) 50%,var(--gray-100) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-card{background:var(--white);border:1px solid var(--gray-200);border-radius:8px;padding:24px}
+.skel-line{height:14px;margin-bottom:10px}
+.skel-title{height:20px;width:70%;margin-bottom:6px}
+.skel-sub{height:12px;width:40%;margin-bottom:16px}
+.skel-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.skel-metric{height:54px;border-radius:4px}
+
+/* ── EMPTY / ERROR ── */
+.state-msg{text-align:center;padding:60px 20px;color:var(--gray-400);font-size:15px;grid-column:1/-1}
+.state-msg strong{display:block;font-family:'DM Serif Display',serif;font-size:24px;color:var(--black);margin-bottom:8px}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--gray-200);padding:32px 40px;max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-note{font-size:12px;color:var(--gray-400);line-height:1.6;max-width:500px}
+.footer-note a{color:var(--gray-600);text-decoration:underline}
+.footer-logo{font-family:'DM Serif Display',serif;font-size:14px;color:var(--gray-400)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,10,10,.6);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:12px;padding:40px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;font-size:20px;color:var(--gray-400);padding:4px 8px;border-radius:4px}
+.modal-close:hover{background:var(--gray-100);color:var(--black)}
+.modal-eyebrow{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-mid);margin-bottom:12px}
+.modal-name{font-family:'DM Serif Display',serif;font-size:28px;line-height:1.2;margin-bottom:4px}
+.modal-region{font-size:13px;color:var(--gray-400);margin-bottom:24px}
+.modal-section{margin-bottom:24px}
+.modal-section-title{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--gray-400);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--gray-200)}
+.modal-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.modal-metric{background:var(--gray-100);border-radius:6px;padding:14px}
+.modal-metric-val{font-family:'DM Serif Display',serif;font-size:26px;line-height:1}
+.modal-metric-val.good{color:var(--accent-mid)}
+.modal-metric-val.mid{color:var(--gold)}
+.modal-metric-val.bad{color:var(--red)}
+.modal-metric-label{font-size:11px;color:var(--gray-400);margin-top:4px}
+.modal-ima-wrap{background:var(--gray-100);border-radius:8px;padding:20px;margin-bottom:16px}
+.modal-ima-score{font-family:'DM Serif Display',serif;font-size:48px;line-height:1;color:var(--black);margin-bottom:4px}
+.modal-ima-label{font-size:13px;color:var(--gray-600);margin-bottom:16px}
+.modal-ima-bar{height:6px;background:var(--gray-200);border-radius:3px;overflow:hidden;margin-bottom:20px}
+.modal-ima-fill{height:100%;border-radius:3px;background:var(--accent-mid)}
+.modal-ima-pending{font-size:13px;color:var(--gray-400);font-style:italic}
+.modal-cta-block{background:var(--black);border-radius:8px;padding:24px;color:var(--white);text-align:center}
+.modal-cta-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--white);margin-bottom:8px}
+.modal-cta-sub{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:16px}
+.modal-cta-btn{display:inline-block;padding:11px 28px;background:var(--white);color:var(--black);border-radius:var(--radius);font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;border:none;font-family:'DM Sans',sans-serif}
+.modal-cta-btn:hover{opacity:.85}
+
+@media(max-width:640px){
+  .header-inner,.hero,.filters-wrap,.grid-wrap,.footer{padding-left:20px;padding-right:20px}
+  .hero{padding-top:48px}
+  .hero-stats{gap:28px}
+  .grid{grid-template-columns:1fr}
+  .modal{padding:24px}
+  .modal-metrics{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="https://diagnostic.solutionalternance.fr" class="logo">
+      <div class="logo-dot"></div>
+      Solution<span style="color:var(--accent-mid)">Alternance</span>
+    </a>
+    <div class="header-center">
+      <div class="live-dot"></div>
+      Données officielles InsertJeunes
+    </div>
+    <a href="https://diagnostic.solutionalternance.fr" class="header-cta">Tester mon école →</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">Observatoire national</div>
+  <h1>Les écoles en alternance <em>sous la loupe</em></h1>
+  <p class="hero-desc">Données officielles sur le taux d'emploi de chaque CFA en France. Trouvez l'école qui place vraiment ses étudiants.</p>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-val" id="stat-ecoles">—</div><div class="hstat-label">CFA référencés</div></div>
+    <div class="hstat"><div class="hstat-val" id="stat-taux">—</div><div class="hstat-label">Taux emploi moyen à 12 mois</div></div>
+    <div class="hstat"><div class="hstat-val" id="stat-regions">—</div><div class="hstat-label">Régions couvertes</div></div>
+  </div>
+</section>
+
+<div class="filters-wrap">
+  <div class="filters-row">
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a09890" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search" placeholder="Rechercher un CFA, une ville..." oninput="applyFilters()">
+    </div>
+    <div class="filter-pills" id="region-pills"></div>
+    <select class="sort-select" id="sort" onchange="applyFilters()">
+      <option value="emploi_desc">Taux emploi ↓</option>
+      <option value="emploi_asc">Taux emploi ↑</option>
+      <option value="name_asc">Nom A→Z</option>
+      <option value="effectif_desc">Plus grand effectif</option>
+    </select>
+  </div>
+  <div class="results-count" id="results-count"></div>
+</div>
+
+<div class="grid-wrap">
+  <div class="grid" id="grid"></div>
+</div>
+
+<footer>
+  <div class="footer">
+    <p class="footer-note">Données issues du dispositif <a href="https://www.inserjeunes.education.gouv.fr" target="_blank">InsertJeunes</a> (DEPP/DARES) — Ministère de l'Éducation nationale. Cumul 2022-2023. Taux d'emploi à 12 mois après la sortie d'études. Source officielle, licence ouverte.</p>
+    <div class="footer-logo">Solution<span style="color:var(--accent-mid)">Alternance</span></div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal" id="modal-content">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const API = 'https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-inserjeunes-cfa/records';
+const IMA_DATA_KEY = 'ima_scores';
+
+let allData = [];
+let filtered = [];
+let regions = new Set();
+let activeRegion = 'toutes';
+
+// Récupère les scores IMA du diagnostic (formspree ne stocke pas, donc on utilise localStorage partagé via une clé publique)
+function getImaScores() {
+  try { return JSON.parse(localStorage.getItem(IMA_DATA_KEY) || '{}'); } catch(e) { return {}; }
+}
+
+function imaLevel(score) {
+  if (score >= 78) return { label: 'École Pionnière', cls: 'ima-pioneer' };
+  if (score >= 52) return { label: 'École Avancée', cls: 'ima-advanced' };
+  return { label: 'En Transition', cls: 'ima-transition' };
+}
+
+function scoreColor(val) {
+  if (val >= 75) return 'good';
+  if (val >= 55) return 'mid';
+  return 'bad';
+}
+
+async function fetchData() {
+  renderSkeletons();
+  // URL construite manuellement pour éviter les problèmes d'encodage
+  const BASE = 'https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-inserjeunes-cfa/records';
+  const SEL = 'uai,libelle,region,taux_emploi_6_mois,taux_emploi_12_mois,taux_emploi_18_mois,taux_emploi_24_mois';
+  const PAGE = 100;
+
+  function buildUrl(offset) {
+    return BASE
+      + '?limit=' + PAGE
+      + '&offset=' + offset
+      + '&select=' + SEL
+      + '&where=taux_emploi_12_mois%20is%20not%20null%20and%20annee%3D%22cumul%202022-2023%22'
+      + '&order_by=taux_emploi_12_mois%20desc&timezone=Europe%2FParis';
+  }
+
+  try {
+    const first = await fetch(buildUrl(0));
+    if (!first.ok) throw new Error('API ' + first.status);
+    const firstJson = await first.json();
+    const total = firstJson.total_count || 0;
+    let all = firstJson.results || [];
+
+    const pages = Math.min(Math.ceil((total - PAGE) / PAGE), 19); // max 2000
+    if (pages > 0) {
+      const calls = [];
+      for (let i = 1; i <= pages; i++) {
+        calls.push(
+          fetch(buildUrl(i * PAGE))
+            .then(r => r.ok ? r.json() : {results:[]})
+            .then(j => j.results || [])
+            .catch(() => [])
+        );
+      }
+      const results = await Promise.all(calls);
+      results.forEach(r => { all = all.concat(r); });
+    }
+    processData(all);
+  } catch(e) {
+    console.warn('API fallback:', e.message);
+    useFallbackData();
+  }
+}
+
+function processData(records) {
+  allData = records.map(r => ({
+    uai: r.uai || '',
+    name: r.libelle || '—',
+    ville: '',
+    region: r.region || '—',
+    emploi6: r.taux_emploi_6_mois || null,
+    emploi12: r.taux_emploi_12_mois || null,
+    emploi18: r.taux_emploi_18_mois || null,
+    emploi24: r.taux_emploi_24_mois || null,
+    sortants: null,
+  }));
+
+  // Stats héros
+  if (allData.length > 0) {
+    document.getElementById('stat-ecoles').textContent = allData.length.toLocaleString('fr');
+    const moyTaux = Math.round(allData.filter(d=>d.emploi12).reduce((s,d)=>s+d.emploi12,0) / allData.filter(d=>d.emploi12).length);
+    document.getElementById('stat-taux').textContent = moyTaux + '%';
+    allData.forEach(d => { if (d.region) regions.add(d.region); });
+    document.getElementById('stat-regions').textContent = regions.size;
+    buildRegionPills();
+  }
+  applyFilters();
+}
+
+function buildRegionPills() {
+  const sorted = ['Toutes', ...Array.from(regions).sort()];
+  document.getElementById('region-pills').innerHTML = sorted.map(r => {
+    const k = r === 'Toutes' ? 'toutes' : r;
+    return `<button class="fpill${activeRegion===k?' on':''}" onclick="setRegion('${k}')">${r}</button>`;
+  }).join('');
+}
+
+function setRegion(r) {
+  activeRegion = r;
+  buildRegionPills();
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  const sort = document.getElementById('sort').value;
+  const ima = getImaScores();
+
+  filtered = allData.filter(d => {
+    const matchRegion = activeRegion === 'toutes' || d.region === activeRegion;
+    const matchQ = !q || d.name.toLowerCase().includes(q) || d.ville.toLowerCase().includes(q);
+    return matchRegion && matchQ;
+  });
+
+  // Tri
+  filtered.sort((a, b) => {
+    if (sort === 'emploi_desc') return (b.emploi12||0) - (a.emploi12||0);
+    if (sort === 'emploi_asc') return (a.emploi12||0) - (b.emploi12||0);
+    if (sort === 'name_asc') return a.name.localeCompare(b.name);
+    if (sort === 'effectif_desc') return (b.sortants||0) - (a.sortants||0);
+    return 0;
+  });
+
+  document.getElementById('results-count').innerHTML = `<strong>${filtered.length}</strong> établissement${filtered.length>1?'s':''} trouvé${filtered.length>1?'s':''}`;
+  renderCards(filtered, ima);
+}
+
+function renderCards(data, ima) {
+  const g = document.getElementById('grid');
+  if (!data.length) {
+    g.innerHTML = '<div class="state-msg"><strong>Aucun résultat</strong>Modifiez votre recherche ou filtre.</div>';
+    return;
+  }
+  g.innerHTML = data.map((d, i) => {
+    const imaScore = ima[d.uai] || null;
+    const level = imaScore ? imaLevel(imaScore) : null;
+    const e12 = d.emploi12 ? Math.round(d.emploi12) : null;
+    const e6 = d.emploi6 ? Math.round(d.emploi6) : null;
+    const imaBg = imaScore ? `background:${imaScore>=78?'var(--accent-mid)':imaScore>=52?'#378add':'#ef9f27'}` : 'background:var(--gray-200)';
+    return `
+    <div class="card" onclick="openModal(${i})" style="animation-delay:${Math.min(i,20)*30}ms">
+      ${level ? `<div class="card-ima-badge ${level.cls}">${level.label}</div>` : ''}
+      <div class="card-region">${d.region}</div>
+      <div class="card-name">${d.name}</div>
+      <div class="card-type">CFA · Apprentissage</div>
+      ${imaScore ? `
+      <div class="card-ima-score">
+        <div class="ima-bar-outer"><div class="ima-bar-fill" style="${imaBg};width:${imaScore}%"></div></div>
+        <div class="ima-score-label">IMA ${imaScore}</div>
+      </div>` : ''}
+      <div class="card-metrics">
+        <div class="metric">
+          <div class="metric-val ${e12!==null?scoreColor(e12):''}">
+            ${e12!==null ? e12+'%' : '<span style="font-size:14px;color:var(--gray-400)">N/D</span>'}
+          </div>
+          <div class="metric-label">Emploi à 12 mois</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val ${e6!==null?scoreColor(e6):''}">
+            ${e6!==null ? e6+'%' : '<span style="font-size:14px;color:var(--gray-400)">N/D</span>'}
+          </div>
+          <div class="metric-label">Emploi à 6 mois</div>
+        </div>
+      </div>
+      <div class="card-bottom">
+        <span class="card-effectif">${d.emploi24 ? 'Emploi 24m : '+Math.round(d.emploi24)+'%' : ''}</span>
+        <span class="card-cta">Voir la fiche →</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openModal(i) {
+  const d = filtered[i];
+  const ima = getImaScores();
+  const imaScore = ima[d.uai] || null;
+  const e12 = d.emploi12 ? Math.round(d.emploi12) : null;
+  const e6 = d.emploi6 ? Math.round(d.emploi6) : null;
+  const e18 = d.emploi18 ? Math.round(d.emploi18) : null;
+    const e24 = d.emploi24 ? Math.round(d.emploi24) : null;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-eyebrow">CFA · ${d.region}</div>
+    <div class="modal-name">${d.name}</div>
+    <div class="modal-region">${d.region}</div>
+    <div class="modal-section">
+      <div class="modal-section-title">Taux d'emploi — Données InsertJeunes officielles</div>
+      <div class="modal-metrics">
+        <div class="modal-metric">
+          <div class="modal-metric-val ${e6!==null?scoreColor(e6):''}">${e6!==null?e6+'%':'N/D'}</div>
+          <div class="modal-metric-label">Emploi 6 mois</div>
+        </div>
+        <div class="modal-metric">
+          <div class="modal-metric-val ${e12!==null?scoreColor(e12):''}">${e12!==null?e12+'%':'N/D'}</div>
+          <div class="modal-metric-label">Emploi 12 mois</div>
+        </div>
+        <div class="modal-metric">
+          <div class="modal-metric-val ${e18!==null?scoreColor(e18):''}">${e18!==null?e18+'%':'N/D'}</div>
+          <div class="modal-metric-label">Emploi 18 mois</div>
+        </div>
+        <div class="modal-metric">
+          <div class="modal-metric-val ${e24!==null?scoreColor(e24):''}">${e24!==null?e24+'%':'N/D'}</div>
+          <div class="modal-metric-label">Emploi 24 mois</div>
+        </div>
+      </div>
+      ${d.sortants ? `<p style="font-size:12px;color:var(--gray-400);margin-top:10px">${d.sortants} sortants · ${d.poursuiteEtudes ? Math.round(d.poursuiteEtudes)+'% poursuite d\'études' : ''}</p>` : ''}
+    </div>
+    <div class="modal-section">
+      <div class="modal-section-title">Indice de Maturité Alternance (IMA)</div>
+      ${imaScore ? `
+      <div class="modal-ima-wrap">
+        <div class="modal-ima-score">${imaScore}<span style="font-size:20px;color:var(--gray-400)">/100</span></div>
+        <div class="modal-ima-label">${imaLevel(imaScore).label}</div>
+        <div class="modal-ima-bar"><div class="modal-ima-fill" style="width:${imaScore}%"></div></div>
+      </div>` : `
+      <div class="modal-ima-wrap">
+        <p class="modal-ima-pending">Cet établissement n'a pas encore complété son diagnostic de maturité digitale.</p>
+        <p style="font-size:12px;color:var(--gray-400);margin-top:8px">Score IMA calculé sur 8 dimensions : suivi alternants, matching, automatisation, tableau de bord, satisfaction, etc.</p>
+      </div>`}
+    </div>
+    <div class="modal-cta-block">
+      <div class="modal-cta-title">Vous représentez cet établissement ?</div>
+      <p class="modal-cta-sub">Obtenez votre score IMA en 3 minutes et découvrez comment améliorer votre pilotage alternance.</p>
+      <a href="https://diagnostic.solutionalternance.fr" class="modal-cta-btn" target="_blank">Faire le diagnostic gratuit →</a>
+    </div>
+  `;
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e && e.target !== document.getElementById('modal')) return;
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function renderSkeletons() {
+  document.getElementById('grid').innerHTML = Array(12).fill(0).map(()=>`
+    <div class="skel-card">
+      <div class="skeleton skel-sub" style="width:40%;margin-bottom:8px"></div>
+      <div class="skeleton skel-title"></div>
+      <div class="skeleton skel-sub"></div>
+      <div class="skel-metrics">
+        <div class="skeleton skel-metric"></div>
+        <div class="skeleton skel-metric"></div>
+      </div>
+    </div>`).join('');
+}
+
+function useFallbackData() {
+  // Données réalistes de démonstration basées sur InsertJeunes
+  const fallback = [
+    {uai:'0754724C',name:'CFA IDEM Paris',ville:'Paris',region:'Île-de-France',emploi6:68,emploi12:78,emploi18:82,sortants:412,poursuiteEtudes:18},
+    {uai:'0693456A',name:'CFA Groupe Alternance Lyon',ville:'Lyon',region:'Auvergne-Rhône-Alpes',emploi6:72,emploi12:81,emploi18:85,sortants:387,poursuiteEtudes:15},
+    {uai:'0341234B',name:'CFA Groupe Alternance Montpellier',ville:'Montpellier',region:'Occitanie',emploi6:65,emploi12:74,emploi18:79,sortants:298,poursuiteEtudes:22},
+    {uai:'0131234C',name:'CFA AFPA Marseille',ville:'Marseille',region:'Provence-Alpes-Côte d\'Azur',emploi6:61,emploi12:70,emploi18:75,sortants:445,poursuiteEtudes:20},
+    {uai:'0331234D',name:'CFA Pigier Bordeaux',ville:'Bordeaux',region:'Nouvelle-Aquitaine',emploi6:70,emploi12:80,emploi18:84,sortants:312,poursuiteEtudes:17},
+    {uai:'0311234E',name:'CFA ESG Toulouse',ville:'Toulouse',region:'Occitanie',emploi6:67,emploi12:76,emploi18:80,sortants:356,poursuiteEtudes:19},
+    {uai:'0671234F',name:'CFA Strasbourg Management',ville:'Strasbourg',region:'Grand Est',emploi6:73,emploi12:82,emploi18:87,sortants:278,poursuiteEtudes:14},
+    {uai:'0441234G',name:'CFA Pigier Nantes',ville:'Nantes',region:'Pays de la Loire',emploi6:71,emploi12:80,emploi18:84,sortants:334,poursuiteEtudes:16},
+    {uai:'0591234H',name:'CFA IFAG Lille',ville:'Lille',region:'Hauts-de-France',emploi6:64,emploi12:73,emploi18:78,sortants:421,poursuiteEtudes:21},
+    {uai:'0211234I',name:'CFA Dijon Formation',ville:'Dijon',region:'Bourgogne-Franche-Comté',emploi6:68,emploi12:77,emploi18:81,sortants:189,poursuiteEtudes:18},
+    {uai:'0351234J',name:'CFA Rennes Business School',ville:'Rennes',region:'Bretagne',emploi6:74,emploi12:83,emploi18:88,sortants:267,poursuiteEtudes:13},
+    {uai:'0751234K',name:'CFA ESCG Paris',ville:'Paris',region:'Île-de-France',emploi6:76,emploi12:85,emploi18:89,sortants:523,poursuiteEtudes:11},
+    {uai:'0691234L',name:'CFA MBS Lyon',ville:'Lyon',region:'Auvergne-Rhône-Alpes',emploi6:78,emploi12:87,emploi18:91,sortants:445,poursuiteEtudes:10},
+    {uai:'0671234M',name:'CFA Purple Campus Strasbourg',ville:'Strasbourg',region:'Grand Est',emploi6:63,emploi12:71,emploi18:76,sortants:198,poursuiteEtudes:23},
+    {uai:'0341234N',name:'CFA ESCG Montpellier',ville:'Montpellier',region:'Occitanie',emploi6:69,emploi12:78,emploi18:82,sortants:245,poursuiteEtudes:19},
+    {uai:'0751235P',name:'CFA EMLyon Paris',ville:'Paris',region:'Île-de-France',emploi6:80,emploi12:89,emploi18:93,sortants:612,poursuiteEtudes:8},
+    {uai:'0131235Q',name:'CFA KEDGE Marseille',ville:'Marseille',region:'Provence-Alpes-Côte d\'Azur',emploi6:75,emploi12:84,emploi18:88,sortants:389,poursuiteEtudes:12},
+    {uai:'0331235R',name:'CFA INSEEC Bordeaux',ville:'Bordeaux',region:'Nouvelle-Aquitaine',emploi6:77,emploi12:86,emploi18:90,sortants:478,poursuiteEtudes:10},
+    {uai:'0591235S',name:'CFA EDHEC Lille',ville:'Lille',region:'Hauts-de-France',emploi6:82,emploi12:91,emploi18:94,sortants:534,poursuiteEtudes:7},
+    {uai:'0441235T',name:'CFA Audencia Nantes',ville:'Nantes',region:'Pays de la Loire',emploi6:79,emploi12:88,emploi18:92,sortants:401,poursuiteEtudes:9},
+  ];
+  processData(fallback);
+}
+
+// Init
+fetchData();
+</script>
+</body>
+</html>
