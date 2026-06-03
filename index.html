@@ -13,7 +13,7 @@
 <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Comparateur d'écoles en alternance et CFA — Taux d'emploi publics | Solution Alternance</title>
+<title>Observatoire Solution Alternance | Comparateur CFA et écoles en alternance</title>
 <meta name="description" content="Comparez les écoles en alternance et CFA en France à partir de données publiques : taux d'emploi, régions, villes, types d'établissements et fiches écoles vérifiables.">
 <link rel="canonical" href="https://observatoire.solutionalternance.fr/">
 <meta name="robots" content="index, follow">
@@ -21,7 +21,7 @@
 <!-- Open Graph -->
 <meta property="og:type"        content="website">
 <meta property="og:url"         content="https://observatoire.solutionalternance.fr/">
-<meta property="og:title"       content="Comparateur d'écoles en alternance et CFA — Taux d'emploi publics | Solution Alternance">
+<meta property="og:title"       content="Observatoire Solution Alternance | Comparateur CFA et écoles en alternance">
 <meta property="og:description" content="Comparez les écoles en alternance et CFA en France à partir de données publiques : taux d'emploi, régions, villes, types d'établissements et fiches écoles vérifiables.">
 <meta property="og:image"       content="https://observatoire.solutionalternance.fr/og-image.png">
 <meta property="og:locale"      content="fr_FR">
@@ -29,7 +29,7 @@
 
 <!-- Twitter / X Card -->
 <meta name="twitter:card"        content="summary_large_image">
-<meta name="twitter:title"       content="Comparateur d'écoles en alternance et CFA | Solution Alternance">
+<meta name="twitter:title"       content="Observatoire Solution Alternance | Comparateur CFA et écoles en alternance">
 <meta name="twitter:description" content="Comparez les écoles en alternance et CFA en France : taux d'emploi, régions, types d'établissements — données publiques officielles.">
 <meta name="twitter:image"       content="https://observatoire.solutionalternance.fr/og-image.png">
 
@@ -279,6 +279,29 @@ body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);mi
 .success-title{font-family:'Playfair Display',serif;font-size:26px;color:var(--ink);margin-bottom:10px}
 .success-sub{font-size:14px;color:var(--gray-600);line-height:1.7;max-width:380px;margin:0 auto 24px}
 
+.seo-section{
+  max-width:1280px;
+  margin:0 auto;
+  padding:52px 48px;
+  border-top:1px solid var(--gray-100);
+  background:var(--paper);
+}
+.seo-section h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,3vw,36px);
+  line-height:1.15;
+  letter-spacing:-.02em;
+  color:var(--ink);
+  margin-bottom:14px;
+}
+.seo-section p{
+  max-width:760px;
+  font-size:15px;
+  line-height:1.75;
+  color:var(--gray-600);
+  margin-bottom:10px;
+  font-weight:300;
+}
 .site-footer{border-top:1px solid var(--gray-100);padding:28px 48px;max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
 .footer-note{font-size:11px;color:var(--gray-400);line-height:1.6;max-width:520px}
 .footer-note a{color:var(--gray-600);text-decoration:underline}
@@ -315,7 +338,7 @@ body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);mi
 .btn-region-apply:hover{background:var(--gray-600)}
 
 @media(max-width:768px){
-  .hdr-inner,.hero,.toolbar,.grid-wrap,.site-footer{padding-left:20px;padding-right:20px}
+  .hdr-inner,.hero,.toolbar,.grid-wrap,.site-footer,.seo-section{padding-left:20px;padding-right:20px}
   .hero{padding-top:44px}.hero-kpis{max-width:100%}.kpi{min-width:120px}
   .grid{grid-template-columns:1fr}.m-metrics{grid-template-columns:1fr 1fr}
   .wizard{padding:24px}.field-row{grid-template-columns:1fr}.hdr-pill{display:none}
@@ -361,7 +384,7 @@ body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);mi
   <div class="toolbar-row">
     <div class="search-big">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="search" placeholder="Rechercher par nom, ville…" oninput="onSearch()">
+      <input type="text" id="search" placeholder="Rechercher une école, un CFA ou une ville…" oninput="onSearch()">
     </div>
     <select class="sel" id="type-filter" onchange="applyFilters()">
       <option value="">Tous les types</option>
@@ -431,6 +454,19 @@ body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);mi
   </div>
 </section>
 
+  <section class="seo-section">
+  <h2>Comparer les écoles et CFA en alternance en France</h2>
+  <p>
+    L’Observatoire Solution Alternance permet de comparer les écoles en alternance,
+    les CFA et les organismes de formation à partir de données publiques :
+    taux d’emploi, localisation, type d’établissement, région et fiches écoles.
+  </p>
+  <p>
+    L’objectif est d’aider les candidats, les familles et les entreprises à mieux
+    comprendre les établissements avant de choisir une formation en alternance.
+  </p>
+</section>
+  
 <footer>
   <div class="site-footer">
     <p class="footer-note">Données <a href="https://catalogue-apprentissage.intercariforef.org" target="_blank">Carif-Oref</a> (catalogue national apprentissage) + <a href="https://www.inserjeunes.education.gouv.fr" target="_blank">InsertJeunes</a> (DEPP/DARES). Source officielle, licence ouverte Étalab.</p>
