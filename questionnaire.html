@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compléter la fiche de mon établissement — Observatoire Solution Alternance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0d0b;--paper:#f5f3ef;--paper-2:#eeece7;
+  --gray-100:#e8e5de;--gray-200:#d4d0c8;--gray-400:#9b9689;--gray-600:#5c5750;
+  --green:#1e4d35;--green-mid:#2e7d52;--green-light:#e4f0e9;--green-bright:#3dba6f;
+  --t:200ms ease;
+}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+
+/* HEADER */
+.hdr{background:rgba(245,243,239,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--gray-100);padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Playfair Display',serif;font-size:17px;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-mark{width:8px;height:8px;border-radius:50%;background:var(--green-mid);box-shadow:0 0 0 3px var(--green-light)}
+.hdr-back{font-size:12px;color:var(--gray-400);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color var(--t)}
+.hdr-back:hover{color:var(--ink)}
+
+/* HERO */
+.hero{max-width:720px;margin:0 auto;padding:64px 24px 48px;text-align:center}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green-mid);margin-bottom:24px}
+.hero-tag::before{content:'';width:28px;height:1.5px;background:var(--green-mid)}
+.hero-tag::after{content:'';width:28px;height:1.5px;background:var(--green-mid)}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(28px,4vw,44px);line-height:1.1;letter-spacing:-.02em;margin-bottom:16px}
+.hero h1 i{color:var(--gray-400)}
+.hero-sub{font-size:15px;font-weight:300;color:var(--gray-600);line-height:1.7;max-width:480px;margin:0 auto 8px}
+.school-banner{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--gray-100);border-radius:99px;padding:10px 20px;margin-top:24px;font-size:13px;font-weight:500}
+.school-banner .dot{width:8px;height:8px;border-radius:50%;background:var(--green-bright)}
+#school-name-display{color:var(--green-mid);font-weight:600}
+
+/* FORM */
+.form-wrap{max-width:720px;margin:0 auto;padding:0 24px 80px}
+
+.section{background:#fff;border:1px solid var(--gray-100);border-radius:16px;padding:32px;margin-bottom:16px}
+.section-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--green-light);color:var(--green-mid);font-size:11px;font-weight:700;margin-bottom:12px}
+.section-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--ink);margin-bottom:4px}
+.section-desc{font-size:13px;color:var(--gray-400);margin-bottom:24px;line-height:1.6}
+
+.field{margin-bottom:20px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--gray-600);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.field input,.field select,.field textarea{width:100%;padding:12px 16px;font-size:14px;font-family:'Outfit',sans-serif;border:1px solid var(--gray-200);border-radius:8px;background:#fff;color:var(--ink);outline:none;transition:border-color var(--t),box-shadow var(--t)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green-mid);box-shadow:0 0 0 3px var(--green-light)}
+.field textarea{resize:vertical;min-height:100px;line-height:1.6}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%239b9689' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;cursor:pointer}
+.field-hint{font-size:11px;color:var(--gray-400);margin-top:6px;font-style:italic}
+
+/* Checkbox "Ne pas indiquer" */
+.skip-row{display:flex;align-items:center;gap:8px;margin-top:8px;cursor:pointer}
+.skip-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--green-mid);cursor:pointer}
+.skip-row span{font-size:12px;color:var(--gray-400)}
+.field.skipped input,.field.skipped select,.field.skipped textarea{opacity:.35;pointer-events:none}
+
+/* Formation repeat */
+.formation-item{background:var(--paper-2);border-radius:10px;padding:20px;margin-bottom:12px;position:relative}
+.formation-item .remove-btn{position:absolute;top:12px;right:12px;width:24px;height:24px;border-radius:50%;border:none;background:var(--gray-100);color:var(--gray-600);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all var(--t)}
+.formation-item .remove-btn:hover{background:var(--gray-200);color:var(--ink)}
+.formation-item .field{margin-bottom:12px}
+.add-formation-btn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:10px 18px;border-radius:8px;border:1.5px dashed var(--gray-200);background:transparent;color:var(--gray-400);cursor:pointer;font-family:'Outfit',sans-serif;transition:all var(--t);width:100%;justify-content:center;margin-top:4px}
+.add-formation-btn:hover{border-color:var(--green-mid);color:var(--green-mid)}
+
+/* RECAP */
+.recap-section{background:var(--ink);border-radius:16px;padding:32px;margin-bottom:16px;color:#fff}
+.recap-title{font-family:'Playfair Display',serif;font-size:22px;color:#fff;margin-bottom:6px}
+.recap-sub{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:24px;line-height:1.6}
+.recap-grid{display:grid;gap:10px;margin-bottom:24px}
+.recap-row{display:flex;gap:12px;padding:12px 16px;background:rgba(255,255,255,.06);border-radius:8px;font-size:13px}
+.recap-label{color:rgba(255,255,255,.5);min-width:180px;font-weight:500}
+.recap-value{color:#fff;font-weight:400;word-break:break-word}
+.recap-value.skipped{color:rgba(255,255,255,.3);font-style:italic}
+
+.submit-btn{width:100%;padding:16px;border:none;border-radius:10px;background:var(--green-mid);color:#fff;font-size:15px;font-weight:600;font-family:'Outfit',sans-serif;cursor:pointer;transition:background var(--t);display:flex;align-items:center;justify-content:center;gap:10px}
+.submit-btn:hover{background:var(--green)}
+.submit-btn:disabled{opacity:.5;cursor:default}
+
+/* PROGRESS */
+.progress-bar{height:3px;background:var(--gray-100);border-radius:2px;margin-bottom:32px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green-mid),var(--green-bright));border-radius:2px;transition:width .4s ease}
+
+/* SUCCESS */
+.success-screen{display:none;max-width:480px;margin:80px auto;text-align:center;padding:0 24px}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--green-light);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:28px}
+.success-title{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:12px}
+.success-sub{font-size:15px;color:var(--gray-600);line-height:1.7}
+
+@media(max-width:640px){
+  .hdr{padding:0 20px}
+  .hero{padding:40px 20px 32px}
+  .form-wrap{padding:0 16px 60px}
+  .section{padding:24px}
+  .recap-label{min-width:130px}
+}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <a href="https://observatoire.solutionalternance.fr" class="logo">
+    <div class="logo-mark"></div>
+    Solution<span style="color:var(--green-mid)">Alternance</span>
+  </a>
+  <a href="https://observatoire.solutionalternance.fr" class="hdr-back">
+    ← Retour à l'observatoire
+  </a>
+</header>
+
+<!-- FORMULAIRE -->
+<div id="form-container">
+  <div class="hero">
+    <div class="hero-tag">Fiche établissement</div>
+    <h1>Complétez les informations<br><i>de votre établissement</i></h1>
+    <p class="hero-sub">Ces informations seront affichées sur votre fiche dans l'Observatoire de l'Alternance. Répondez uniquement aux questions pour lesquelles vous disposez de l'information.</p>
+    <div class="school-banner">
+      <div class="dot"></div>
+      <span id="school-name-display">Chargement…</span>
+      <span style="color:var(--gray-400)">·</span>
+      <span id="uai-display" style="font-size:11px;color:var(--gray-400);font-family:monospace"></span>
+    </div>
+  </div>
+
+  <div class="form-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+    <!-- SECTION 1 : FORMATIONS -->
+    <div class="section">
+      <div class="section-num">1</div>
+      <div class="section-title">Formations proposées</div>
+      <div class="section-desc">Listez les formations en alternance disponibles dans votre établissement.</div>
+
+      <div id="formations-list">
+        <div class="formation-item" id="formation-0">
+          <div class="field">
+            <label>Intitulé de la formation</label>
+            <input type="text" placeholder="Ex : BTS Management Commercial Opérationnel" class="f-name">
+          </div>
+          <div class="field">
+            <label>Niveau</label>
+            <select class="f-level">
+              <option value="">Sélectionner…</option>
+              <option>CAP (Bac-2)</option>
+              <option>Bac Pro</option>
+              <option>BTS / BUT (Bac+2)</option>
+              <option>Licence Pro (Bac+3)</option>
+              <option>Bachelor (Bac+3)</option>
+              <option>Master / MBA (Bac+5)</option>
+              <option>Autre</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Rythme d'alternance</label>
+            <input type="text" placeholder="Ex : 3 semaines entreprise / 1 semaine école" class="f-rythme">
+          </div>
+        </div>
+      </div>
+      <button class="add-formation-btn" onclick="addFormation()">+ Ajouter une formation</button>
+    </div>
+
+    <!-- SECTION 2 : RÉSULTATS -->
+    <div class="section">
+      <div class="section-num">2</div>
+      <div class="section-title">Résultats & insertion</div>
+      <div class="section-desc">Ces données aident les candidats à évaluer les débouchés réels de votre établissement.</div>
+
+      <div class="field" id="field-reussite">
+        <label>Taux de réussite à l'examen (%)</label>
+        <input type="number" min="0" max="100" placeholder="Ex : 87" id="reussite">
+        <div class="field-hint">Part des apprentis ayant obtenu leur diplôme sur la dernière promotion</div>
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-reussite',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+
+      <div class="field" id="field-rupture">
+        <label>Taux de rupture de contrat (%)</label>
+        <input type="number" min="0" max="100" placeholder="Ex : 8" id="rupture">
+        <div class="field-hint">Part des contrats rompus avant la fin de la formation</div>
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-rupture',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+
+      <div class="field" id="field-placement">
+        <label>Taux d'apprentis placés en entreprise (%)</label>
+        <input type="number" min="0" max="100" placeholder="Ex : 94" id="placement">
+        <div class="field-hint">Part des apprentis ayant trouvé un contrat avant le début de la formation</div>
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-placement',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+    </div>
+
+    <!-- SECTION 3 : ACCOMPAGNEMENT -->
+    <div class="section">
+      <div class="section-num">3</div>
+      <div class="section-title">Accompagnement à la recherche d'entreprise</div>
+      <div class="section-desc">Un critère clé pour les candidats qui n'ont pas encore trouvé leur employeur.</div>
+
+      <div class="field" id="field-aide">
+        <label>L'établissement aide-t-il à trouver l'entreprise ?</label>
+        <select id="aide">
+          <option value="">Sélectionner…</option>
+          <option value="oui_actif">Oui, service dédié actif (jobboard, réseau, mise en relation)</option>
+          <option value="oui_partiel">Oui, accompagnement partiel (conseils, offres partagées)</option>
+          <option value="non">Non, l'apprenti cherche seul</option>
+        </select>
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-aide',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+
+      <div class="field" id="field-delai">
+        <label>Délai moyen pour trouver un contrat</label>
+        <select id="delai">
+          <option value="">Sélectionner…</option>
+          <option value="moins_1mois">Moins d'1 mois</option>
+          <option value="1_2mois">1 à 2 mois</option>
+          <option value="2_3mois">2 à 3 mois</option>
+          <option value="plus_3mois">Plus de 3 mois</option>
+        </select>
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-delai',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+
+      <div class="field" id="field-partenaires">
+        <label>Nombre d'entreprises partenaires</label>
+        <input type="number" min="0" placeholder="Ex : 120" id="partenaires">
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-partenaires',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+    </div>
+
+    <!-- SECTION 4 : INFOS PRATIQUES -->
+    <div class="section">
+      <div class="section-num">4</div>
+      <div class="section-title">Informations pratiques</div>
+      <div class="section-desc">Informations essentielles pour les candidats et les familles.</div>
+
+      <div class="field" id="field-effectif">
+        <label>Effectif moyen par promotion</label>
+        <input type="number" min="0" placeholder="Ex : 25" id="effectif">
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-effectif',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+
+      <div class="field" id="field-frais">
+        <label>Frais de scolarité à la charge de l'apprenti</label>
+        <select id="frais">
+          <option value="">Sélectionner…</option>
+          <option value="gratuit">Gratuit (pris en charge à 100% par l'OPCO)</option>
+          <option value="frais_reduits">Frais réduits (participation partielle possible)</option>
+          <option value="frais_variables">Variable selon la formation</option>
+          <option value="frais_annee">Frais annuels à préciser</option>
+        </select>
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-frais',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+
+      <div class="field" id="field-frais-detail">
+        <label>Précision sur les frais (optionnel)</label>
+        <input type="text" placeholder="Ex : 500€/an pour certaines formations Bac+5" id="frais-detail">
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-frais-detail',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+    </div>
+
+    <!-- SECTION 5 : CONTACT -->
+    <div class="section">
+      <div class="section-num">5</div>
+      <div class="section-title">Contact admissions</div>
+      <div class="section-desc">Ces coordonnées seront affichées sur votre fiche pour faciliter la prise de contact.</div>
+
+      <div class="field" id="field-email-public">
+        <label>Email admissions (public)</label>
+        <input type="email" placeholder="admissions@votre-ecole.fr" id="email-public">
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-email-public',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+
+      <div class="field" id="field-tel">
+        <label>Téléphone admissions</label>
+        <input type="tel" placeholder="Ex : 04 67 00 00 00" id="tel">
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-tel',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+
+      <div class="field" id="field-website">
+        <label>Site web de l'établissement</label>
+        <input type="url" placeholder="https://www.votre-ecole.fr" id="website">
+        <label class="skip-row"><input type="checkbox" onchange="toggleSkip('field-website',this)"><span>Ne pas indiquer cette information</span></label>
+      </div>
+    </div>
+
+    <!-- RÉCAP & ENVOI -->
+    <div class="recap-section" id="recap-section">
+      <div class="recap-title">Récapitulatif de votre fiche</div>
+      <div class="recap-sub">Vérifiez les informations avant d'envoyer. Les champs non renseignés n'apparaîtront pas sur votre fiche.</div>
+      <div class="recap-grid" id="recap-grid"></div>
+      <button class="submit-btn" id="submit-btn" onclick="submitForm()">
+        <span>Envoyer ma fiche</span>
+        <span>→</span>
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-screen" id="success-screen">
+  <div class="success-icon">✓</div>
+  <h2 class="success-title">Fiche envoyée !</h2>
+  <p class="success-sub">Merci, vos informations ont bien été reçues. Elles seront intégrées à votre fiche sur l'Observatoire sous 48h.</p>
+</div>
+
+<script>
+// ── Lire l'UAI et le nom depuis l'URL ─────────────────────────────────────────
+const params = new URLSearchParams(window.location.search);
+const UAI = (params.get('uai') || '').toUpperCase();
+const NOM = params.get('nom') ? decodeURIComponent(params.get('nom')) : '';
+
+document.getElementById('school-name-display').textContent = NOM || 'Établissement';
+document.getElementById('uai-display').textContent = UAI ? 'UAI : ' + UAI : '';
+
+// ── Formations dynamiques ─────────────────────────────────────────────────────
+let formationCount = 1;
+function addFormation() {
+  const idx = formationCount++;
+  const div = document.createElement('div');
+  div.className = 'formation-item';
+  div.id = 'formation-' + idx;
+  div.innerHTML = `
+    <button class="remove-btn" onclick="removeFormation('formation-${idx}')">×</button>
+    <div class="field"><label>Intitulé de la formation</label>
+      <input type="text" placeholder="Ex : Licence Pro Commerce" class="f-name"></div>
+    <div class="field"><label>Niveau</label>
+      <select class="f-level">
+        <option value="">Sélectionner…</option>
+        <option>CAP (Bac-2)</option><option>Bac Pro</option>
+        <option>BTS / BUT (Bac+2)</option><option>Licence Pro (Bac+3)</option>
+        <option>Bachelor (Bac+3)</option><option>Master / MBA (Bac+5)</option><option>Autre</option>
+      </select></div>
+    <div class="field"><label>Rythme d'alternance</label>
+      <input type="text" placeholder="Ex : 2 jours école / 3 jours entreprise" class="f-rythme"></div>`;
+  document.getElementById('formations-list').appendChild(div);
+  updateProgress();
+}
+function removeFormation(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+  updateProgress();
+}
+
+// ── Skip fields ───────────────────────────────────────────────────────────────
+function toggleSkip(fieldId, cb) {
+  const field = document.getElementById(fieldId);
+  if (cb.checked) field.classList.add('skipped');
+  else field.classList.remove('skipped');
+  updateProgress();
+  buildRecap();
+}
+
+// ── Collecte des données ──────────────────────────────────────────────────────
+function getVal(id) {
+  const field = document.getElementById('field-' + id);
+  if (field && field.classList.contains('skipped')) return null;
+  const el = document.getElementById(id);
+  if (!el) return null;
+  return el.value.trim() || null;
+}
+
+function getFormations() {
+  const items = document.querySelectorAll('.formation-item');
+  const result = [];
+  items.forEach(item => {
+    const name = item.querySelector('.f-name')?.value.trim();
+    const level = item.querySelector('.f-level')?.value;
+    const rythme = item.querySelector('.f-rythme')?.value.trim();
+    if (name) result.push({ intitule: name, niveau: level || null, rythme: rythme || null });
+  });
+  return result;
+}
+
+// ── Progress ──────────────────────────────────────────────────────────────────
+function updateProgress() {
+  const fields = ['reussite','rupture','placement','aide','delai','partenaires','effectif','frais','email-public','tel','website'];
+  let filled = 0;
+  fields.forEach(id => { if (getVal(id)) filled++; });
+  const formations = getFormations();
+  if (formations.length > 0) filled += 2;
+  const pct = Math.min(100, Math.round((filled / (fields.length + 2)) * 100));
+  document.getElementById('progress').style.width = pct + '%';
+  buildRecap();
+}
+
+// ── Récap ─────────────────────────────────────────────────────────────────────
+const LABELS = {
+  reussite: 'Taux de réussite examen',
+  rupture: 'Taux de rupture contrat',
+  placement: 'Taux placement entreprise',
+  aide: 'Aide recherche entreprise',
+  delai: 'Délai moyen placement',
+  partenaires: 'Entreprises partenaires',
+  effectif: 'Effectif par promo',
+  frais: 'Frais de scolarité',
+  'frais-detail': 'Précision frais',
+  'email-public': 'Email admissions',
+  tel: 'Téléphone',
+  website: 'Site web'
+};
+const AIDE_LABELS = {
+  oui_actif: 'Oui — service dédié actif',
+  oui_partiel: 'Oui — accompagnement partiel',
+  non: 'Non, l\'apprenti cherche seul'
+};
+const DELAI_LABELS = {
+  moins_1mois: 'Moins d\'1 mois',
+  '1_2mois': '1 à 2 mois',
+  '2_3mois': '2 à 3 mois',
+  plus_3mois: 'Plus de 3 mois'
+};
+
+function buildRecap() {
+  const grid = document.getElementById('recap-grid');
+  let html = '';
+
+  // UAI + nom
+  html += `<div class="recap-row"><div class="recap-label">Établissement</div><div class="recap-value">${NOM || '—'} <span style="font-size:11px;color:rgba(255,255,255,.4)">(${UAI})</span></div></div>`;
+
+  // Formations
+  const formations = getFormations();
+  if (formations.length > 0) {
+    const fText = formations.map(f => `${f.intitule}${f.niveau ? ' · ' + f.niveau : ''}${f.rythme ? ' · ' + f.rythme : ''}`).join('<br>');
+    html += `<div class="recap-row"><div class="recap-label">Formations (${formations.length})</div><div class="recap-value">${fText}</div></div>`;
+  } else {
+    html += `<div class="recap-row"><div class="recap-label">Formations</div><div class="recap-value skipped">Non renseigné</div></div>`;
+  }
+
+  // Autres champs
+  Object.keys(LABELS).forEach(id => {
+    const val = getVal(id);
+    let display = val;
+    if (id === 'aide' && val) display = AIDE_LABELS[val] || val;
+    if (id === 'delai' && val) display = DELAI_LABELS[val] || val;
+    if (id === 'reussite' || id === 'rupture' || id === 'placement') display = val ? val + '%' : null;
+    html += `<div class="recap-row"><div class="recap-label">${LABELS[id]}</div><div class="recap-value ${!display ? 'skipped' : ''}">${display || 'Non renseigné'}</div></div>`;
+  });
+
+  grid.innerHTML = html;
+}
+
+// ── Envoi ─────────────────────────────────────────────────────────────────────
+// GOOGLE APPS SCRIPT URL — à remplacer par ton URL de déploiement
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzr4E7CZDqIgW3NvxfvQ6fa9IBgeQRP656LaEQflhIwd2zf7P7xAoNxnffIgSE-ElNu/exec';
+
+async function submitForm() {
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span>Envoi en cours…</span>';
+
+  const data = {
+    uai: UAI,
+    nom: NOM,
+    timestamp: new Date().toISOString(),
+    formations: getFormations(),
+    taux_reussite: getVal('reussite'),
+    taux_rupture: getVal('rupture'),
+    taux_placement: getVal('placement'),
+    aide_entreprise: getVal('aide'),
+    delai_placement: getVal('delai'),
+    nb_partenaires: getVal('partenaires'),
+    effectif_promo: getVal('effectif'),
+    frais_scolarite: getVal('frais'),
+    frais_detail: getVal('frais-detail'),
+    email_admissions: getVal('email-public'),
+    telephone: getVal('tel'),
+    website: getVal('website')
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    document.getElementById('form-container').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+  } catch(e) {
+    btn.disabled = false;
+    btn.innerHTML = '<span>Envoyer ma fiche</span><span>→</span>';
+    alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+  }
+}
+
+// ── Listeners pour progress en live ──────────────────────────────────────────
+document.querySelectorAll('input, select, textarea').forEach(el => {
+  el.addEventListener('input', updateProgress);
+  el.addEventListener('change', updateProgress);
+});
+
+// Init
+buildRecap();
+</script>
+</body>
+</html>
