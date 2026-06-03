@@ -607,6 +607,13 @@ let showAllRegions=false;
 
 function getIMA(){try{return JSON.parse(localStorage.getItem('ima_scores')||'{}')}catch(e){return{}}}
 
+  // Fusion ecoles-extra
+if(window.ECOLES_EXTRA&&window.ECOLES_EXTRA.length){
+  const _ex={};
+  window.ECOLES_EXTRA.forEach(e=>{if(e.uai)_ex[e.uai.toUpperCase()]=e;});
+  SCHOOLS.forEach(s=>{const x=_ex[(s.u||'').toUpperCase()];if(x)Object.assign(s,x);});
+}
+  
 function init(){
   const ima=getIMA();
   allData=SCHOOLS.map(r=>({
@@ -1027,5 +1034,6 @@ function updateRegionBadge(){
 
 init();
 </script>
+  <script src="ecoles-extra.js" onerror="window.ECOLES_EXTRA=[]"></script>
 </body>
 </html>
