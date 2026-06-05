@@ -865,13 +865,13 @@ ${imaHtml}
     </div>
     ${d.formations&&d.formations.length?`<div class="msec"><div class="msec-title">Formations proposées</div>${d.formations.map(f=>`<div style="padding:8px 0;border-bottom:1px solid var(--border)"><strong>${f.intitule}</strong>${f.niveau?' · '+f.niveau:''}${f.rythme?' · '+f.rythme:''}</div>`).join('')}</div>`:''}
     ${d.email_admissions||d.telephone||d.website?`<div class="msec"><div class="msec-title">Contact admissions</div>${d.email_admissions?`<div>📧 <a href="mailto:${d.email_admissions}" style="color:var(--green-mid)">${d.email_admissions}</a></div>`:''} ${d.telephone?`<div>📞 ${d.telephone}</div>`:''} ${d.website?`<div>🌐 <a href="${d.website}" target="_blank" style="color:var(--green-mid)">${d.website}</a></div>`:''}</div>`:''}
-    <div class="cta-dark">
+    ${!d.email_admissions&&!d.formations?`<div class="cta-dark">
       <div class="cta-dark-title">Cette fiche est incomplète.</div>
       <p class="cta-dark-sub">Complétez-la en 2 minutes pour que les étudiants, familles et entreprises aient toutes les informations dont ils ont besoin sur votre établissement.</p>
       <div class="cta-btns">
         <button class="cta-dark-btn" onclick="openClaim()">Revendiquer cette école →</button>
       </div>
-    </div>`;
+    </div>`:''}`;
   openOverlay('modal-school');
 }
 
